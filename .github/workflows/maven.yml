@@ -57,7 +57,7 @@ jobs:
       - name: Debugging
         id: check-tag
         run: |
-          IMAGE_NAME="sharmanayan/test2"
+          IMAGE_NAME="sharmanayan/springboot-images-new"
           TAG_WITHOUT_BUILD_NUMBER="${{ env.BRANCH }}-${{ env.DATE }}-${{ env.PULLED_DATA }}" 
           API_URL="https://hub.docker.com/v2/repositories/$IMAGE_NAME/tags/?page_size=10&ordering=last_updated"
           AUTH_HEADER="Authorization: Bearer ${{ secrets.DOCKER_TOKEN }}"
