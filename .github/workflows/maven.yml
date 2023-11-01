@@ -37,9 +37,6 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
 
-      - name: Checkout Main Branch
-        uses: actions/checkout@v2
-
       - name: Read Data from File
         id: read-file
         run: |
@@ -57,7 +54,7 @@ jobs:
       - name: Debugging
         id: check-tag
         run: |
-          IMAGE_NAME="sharmanayan/springboot-images-new"
+          IMAGE_NAME="sharmanayan/nayan"
           TAG_WITHOUT_BUILD_NUMBER="${{ env.BRANCH }}-${{ env.DATE }}-${{ env.PULLED_DATA }}" 
           API_URL="https://hub.docker.com/v2/repositories/$IMAGE_NAME/tags/?page_size=10&ordering=last_updated"
           AUTH_HEADER="Authorization: Bearer ${{ secrets.DOCKER_TOKEN }}"
@@ -94,7 +91,7 @@ jobs:
       - name: Build Docker image
         run: |
           TAG=${{ env.TAG }}
-          docker build --no-cache -t $TAG .
+          docker build  -t $TAG .
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
 
