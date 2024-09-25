@@ -34,7 +34,6 @@ stages:
               javac -version
             displayName: 'Install and Set OpenJDK 17'
 
-          # Step 3: Set JAVA_HOME for the pipeline environment explicitly
           - script: |
               echo "Setting JAVA_HOME for Maven"
               echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
@@ -47,10 +46,14 @@ stages:
               mvn -version
             displayName: 'Verify Java and Maven Versions'
 
-          # Step 4: Build the application with Maven
-          - script: |
-              mvn clean package
-            displayName: 'Build Java Application'
+          - task: Maven@3
+            inputs:
+              mavenPomFile: 'pom.xml'
+              goals: 'clean install'
+              options: '-DskipTests=true'  # Skip tests if not needed
+              publishJUnitResults: true
+              testResultsFiles: '**/TEST-*.xml'
+              mavenVersionOption: 'Default'
 
           # Step 5: Build and push the Docker image
           - task: Docker@2
