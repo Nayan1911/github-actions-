@@ -3,29 +3,47 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-- main
+  - main
 
 resources:
-- repo: self
+  - repo: self
 
 variables:
   tag: '$(Build.BuildId)'
 
 stages:
-- stage: Build
-  displayName: Build image
-  jobs:
-  - job: Build
-    displayName: Build
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-    - task: Docker@2
-      inputs:
-        containerRegistry: 'docker'
-        repository: 'sharmanayan/Synergy_Test'
-        command: 'buildAndPush'
-        Dockerfile: '**/Dockerfile'
+  - stage: Build
+    displayName: Build image
+    jobs:
+      - job: Build
+        displayName: Build
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          # Step 1: Checkout the source code
+          - checkout: self
+
+          # Step 2: Set up Java environment (optional if not already set up)
+          - task: UseJavaVersion@1
+            inputs:
+              versionSpec: '1.8'
+              jdkArchitectureOption: 'x64'
+
+          # Step 3: Build the application (Maven example, adjust if using Gradle)
+          - script: |
+              mvn clean package
+            displayName: 'Build Java Application'
+
+          # Step 4: Build and push the Docker image
+          - task: Docker@2
+            inputs:
+              containerRegistry: 'docker'  # Update with your Docker registry service connection name
+              repository: 'sharmanayan/Synergy_Test'
+              command: 'buildAndPush'
+              Dockerfile: '**/Dockerfile'
+              tags: |
+                $(tag)
+
 
     # - task: Docker@2
     #   displayName: Build an image
