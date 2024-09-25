@@ -27,8 +27,12 @@ stages:
           - script: |
               sudo apt-get update
               sudo apt-get install -y openjdk-17-jdk
+              echo "##vso[task.setvariable variable=JAVA_HOME]$(readlink -f /usr/bin/java | sed "s:/bin/java::")"
+              export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:/bin/java::")
+              echo "JAVA_HOME is set to $JAVA_HOME"
               java -version
-            displayName: 'Install OpenJDK 17'
+              javac -version
+            displayName: 'Install and Set OpenJDK 17'
 
           # Step 3: Build the application with Maven
           - script: |
@@ -44,6 +48,7 @@ stages:
               Dockerfile: '**/Dockerfile'
               tags: |
                 $(tag)
+
 
 
 
