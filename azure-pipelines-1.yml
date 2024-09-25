@@ -23,14 +23,14 @@ stages:
           # Step 1: Checkout the source code
           - checkout: self
 
-          # Step 2: Install Java (OpenJDK 8)
+          # Step 2: Install Java 17 (OpenJDK)
           - script: |
               sudo apt-get update
-              sudo apt-get install -y openjdk-8-jdk
+              sudo apt-get install -y openjdk-17-jdk
               java -version
-            displayName: 'Install OpenJDK 8'
+            displayName: 'Install OpenJDK 17'
 
-          # Step 3: Build the application (Maven example, adjust if using Gradle)
+          # Step 3: Build the application with Maven
           - script: |
               mvn clean package
             displayName: 'Build Java Application'
@@ -44,6 +44,7 @@ stages:
               Dockerfile: '**/Dockerfile'
               tags: |
                 $(tag)
+
 
 
 
