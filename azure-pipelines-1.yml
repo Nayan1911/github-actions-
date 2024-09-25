@@ -23,11 +23,12 @@ stages:
           # Step 1: Checkout the source code
           - checkout: self
 
-          # Step 2: Set up Java environment (optional if not already set up)
-          - task: UseJavaVersion@1
-            inputs:
-              versionSpec: '1.8'
-              jdkArchitectureOption: 'x64'
+          # Step 2: Install Java (OpenJDK 8)
+          - script: |
+              sudo apt-get update
+              sudo apt-get install -y openjdk-8-jdk
+              java -version
+            displayName: 'Install OpenJDK 8'
 
           # Step 3: Build the application (Maven example, adjust if using Gradle)
           - script: |
@@ -43,6 +44,7 @@ stages:
               Dockerfile: '**/Dockerfile'
               tags: |
                 $(tag)
+
 
 
     # - task: Docker@2
